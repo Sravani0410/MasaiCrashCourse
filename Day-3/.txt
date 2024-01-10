@@ -1,0 +1,5 @@
+https://scrawny-gouda-144.notion.site/S3D3-Student-Notes-4f4ad1d89d7e4c32bead4694789bd9d7
+Self study:
+ status codes: refer in Frontend/statuscode.txt
+ 
+

@@ -1,0 +1,13 @@
+1.status codes --> refer in Frontend/statuscode.txt
+2.what are the http methods?
+2. what is the difference between put and patch?
+    -PUT is like giving something to server to replace an existing item completely. 
+    Its like replacing the number-blocks in the toy shelf with a new one. 
+    This method is used to update an existing resource on a server.
+     For example, a user may use this method to change entire profile information
+    -The difference between PUT and POST is that PUT is idempotent: calling it once or several times successively has the same effect (that is no side effect),
+     whereas successive identical POST requests may have additional effects, akin to placing an order several times.
+    -A PATCH is not necessarily idempotent, although it can be. 
+    Contrast this with PUT; which is always idempotent. 
+    The word "idempotent" means that any number of repeated, identical requests will leave the resource in the same state. 
+    For example if an auto-incrementing counter field is an integral part of the resource, then a PUT will naturally overwrite it (since it overwrites everything), but not necessarily so for PATCH.
