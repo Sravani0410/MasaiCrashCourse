@@ -127,3 +127,19 @@
 // console.log(find(1)(2)(3)())
 // console.log(find(1)(2)(3)(4)())
 
+function multiply(a) {
+    // Infinity parmaters are passing into the function
+// example:
+// function find(val1){
+    return function (b){
+       if(b){
+        return multiply(a*b)
+       }
+       return a;
+    } 
+}
+
+const result1 = multiply(2)(3)(4)(5)();
+console.log(result1); // 120
+
+
