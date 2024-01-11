@@ -1,0 +1,26 @@
+https://chipped-snarl-97c.notion.site/Debouncing-Throttling-1-650e4f0236194166885f6c4202c3e112
+
+
+omDB-- >apikey of instructor:4c534241--> https://www.omdbapi.com/?apikey=4c534241&s=avenger
+
+Debouncing vs. Throttling: https://dev.to/shameel/javascript-debouncing-vs-throttling-55kh
+==========================
+Use debouncing when you want to delay the execution of a function until a user stops interacting with an element. 
+This is suitable for scenarios like autocomplete suggestions or real-time search.
+
+Use throttling when you want to limit the rate at which a function can be called. 
+It's ideal for handling events like scrolling, resizing, or mouse movement.
+
+Example:
+=======
+For a real world example when user is typing in an input and the delay is 1 second, then:
+
+In debouncing, the function will be executed after 1 second when the user stops typing. 
+This means that if the user continues to type within the 1-second delay, t
+he function execution will be postponed until there is a 1-second pause in typing.
+
+It's executed once.
+In throttling, the function will be executed after every 1 second at regular intervals if the user keeps triggering the event. 
+Throttling allows the function to be executed at regular intervals (e.g., every 1 second), as long as the user keeps triggering the event.
+
+It limits the frequency of function calls, ensuring it doesn't execute too often, even if the event is fired frequently.
