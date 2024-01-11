@@ -1,0 +1,52 @@
+https://scrawny-gouda-144.notion.site/Events-handlers-Infinite-scrolling-54e586ef23d94d14a5c9353d3f8f6f2e
+
+Event Capturing vs Bubbling:
+============================
+When we clicked on the child, technically we also clicked on the parent and grandparent as the child is inside them. 
+This process of event handling, going from the child out to its ancestors is called event **bubbling**.
+
+When an event occurs on an element, it can propagate through the DOM tree in two phases: the capturing phase and the bubbling phase.
+
+- **Capturing Phase:** During this phase, the event is captured from the root of the DOM tree down to the target element.
+- **Bubbling Phase:** After the capturing phase, the event bubbles up from the target element back up to the root of the DOM tree.
+
+By default, event listeners are set to listen in the bubbling phase, meaning that the innermost element's event listener is executed first, and then the event bubbles up to the outer elements, triggering their event listeners in order.
+
+However, when you specify **`{capture: true}`** in an event listener, it changes the phase in which the event listener is triggered to the capturing phase.
+
+We can prevent further bubbling or capturing of events using `e.stopPropagation()`
+
+We can prevent further bubbling or capturing of events if there is more than one event present using `e.stopImmediatePropagation()`
+As a third argument of the event listener, we can pass {once: true}, to immediately remove the listener after the first event.
+
+
+------------------------------------------------Infinite Scrolling----------------------------------------
+Difference between `offsetHeight`, `clientHeight` and `scrollHeight`
+
+**scrollHeight**: The `scrollHeight` value is equal to the minimum height the element would require in order to fit all the content in the viewport without using a vertical scrollbar.
+
+`ENTIRE content & padding (visible or not)`
+
+!https://miro.medium.com/v2/resize:fit:399/1*IjO5mKXNyTO5moRHlj4m1A.png
+
+**clientHeight**: it includes the element’s padding, but not its border, margin or horizontal scrollbar (if present). 
+It can also include the height of pseudo-elements such as `[::before](https://developer.mozilla.org/en-US/docs/Web/CSS/::before)` or `[::after](https://developer.mozilla.org/en-US/docs/Web/CSS/::after)`.
+ If the element's content can fit without a need for vertical scrollbar, its `scrollHeight` is equal to`[clientHeight](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight). 
+ VISIBLE content & padding`
+offsetHeight: is a measurement in pixels of the element’s CSS height, including border, padding and the element’s horizontal scrollbar (if present, if rendered). It does not include the height of pseudo-elements such as ::before or ::after.
+The following equivalence returns true if an element is at the end of its scroll, false if it isn't.
+element.scrollHeight - element.scrollTop === element.clientHeight
+
+Note:
+=====
+### **scrollHeight**: `ENTIRE  content & padding (visible or not)`
+
+Height of all content + paddings, despite of height of the element.
+
+### **clientHeight**: `VISIBLE content & padding`
+
+Only visible height: content portion limited by explicitly defined height of the element.
+
+### **offsetHeight**: `VISIBLE content & padding` `+ border + scrollbar`
+
+Height occupied by the element on document.
