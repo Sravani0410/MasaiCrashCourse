@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      input {
+        display: block;
+        width: 300px;
+        height: 60px;
+        margin: 20px auto;
+      }
+      /* Style for the movie card container */
+      #movie-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 20px;
+      }
+
+      /* Style for individual movie cards */
+      .movie-card {
+        width: 300px;
+        border: 1px solid #ddd;
+        margin: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .movie-card:hover {
+        transform: scale(1.05);
+      }
+
+      /* Style for movie poster image */
+      .poster {
+        width: 100%;
+        max-width:400px;
+        max-height: 400px; /* Adjust the max height as needed */
+        object-fit: cover; /* Maintain aspect ratio while covering the container */
+      }
+
+      /* Style for movie details */
+      .movie-details {
+        padding: 10px;
+        flex: 1; /* Allow details to take remaining space */
+      }
+
+      .title {
+        font-size: 1.2em;
+        margin-bottom: 5px;
+      }
+
+      .info {
+        font-size: 0.9em;
+        color: #666;
+      }
+
+      .imdbID {
+        font-size: 0.8em;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" id="inpt" />
+    <pre>
+        <div id="container"></div>
+    </pre>
+  </body>
+</html>
+<script src="throttling.js"></script>
