@@ -87,24 +87,74 @@ above example:
 // })
 // console.log(arr2)
 
-let arr1=[1,3,4,5,6,7,8,9]
-let arr2=arr1.filter((item)=>item<6)
-console.log(arr2)
+// let arr1=[1,3,4,5,6,7,8,9]
+// let arr2=arr1.filter((item)=>item<6)
+// console.log(arr2)
 
-Resume:
+// **************************************sort**************************************
 
-// "1. Chat App - Links are attached in wrong Icons.
-// 2. Live Link of Chat App not working.
-// 3. Harbour Bites- Live Link is attached in Github Link.
-// 4. Nitroxpress- Links are attached in the wrong icon.
-// 5. Education should be in Reverse Chronological order.
-// 6. You should not use bright colours, Use colours like black, Dark Blue, Grey.
+// let arr1=[
+//     {firstName:"Sravani",rollno:1},
+//     {firstName:"Sandhya",rollno:2},
+//     {firstName:"Devi",rollno:3},
+//     {firstName:"Madhu",rollno:4},
+//     {firstName:"Kiran",rollno:5},
+//     {firstName:"Uma",rollno:6},
+//     {firstName:"Lakshmi",rollno:7},
+// ]
 
+// let arr2=[1,30,4,500,6,799,8,999]
+// excepted:[1,4,6,8,30,500,799,999]
+// let arr3=["Kiran","Lakshmi","Madhu","Devi","Sandhya","Sravani","Uma"]
+// let x=arr2.sort()
+// console.log(x,arr2) //output:[1,30,4,500,6,799,8,999] because dictory order it is taking for that we have to tell
 
-Portfolio- 
+// let x=arr2.sort((a,b)=>{
+  //   if(a>b){
+  //     return 1
+  //   }
+  //   if(a<b){
+  //     return -1
+  //   }
+  //   if(a===b){
+  // return 0
+  //   }
+  // insteaded of doing if condition we can directly return a-b
+  // return a-b
+ 
+// })
+ // only one expression so no need to return statement
+//  let x=arr2.sort((a,b)=>a-b)
+// console.log(x)
 
-// "1. Skills heading to be added.
-// 2. Harbour Bites- Source code link is wrong.
-// 3. Hero Image should be there in projects.
-"
+// let arr1=[
+//   {firstName:"Sravani",rollno:1},
+//   {firstName:"Sandhya",rollno:7},
+//   {firstName:"Devi",rollno:3},
+//   {firstName:"Madhu",rollno:4},
+//   {firstName:"Kiran",rollno:2},
+//   {firstName:"Uma",rollno:6},
+//   {firstName:"Lakshmi",rollno:5},
+// ]
 
+// let x=arr1.sort((a,b)=>a.rollno-b.rollno)
+// console.log(x)
+
+// *******************Reduce*************************
+let arr1=[
+  {firstName:"Sravani",score:3},
+  {firstName:"Sandhya",score:7},
+  {firstName:"Devi",score:3},
+]
+
+let x=arr1.reduce((acc,item)=>{
+  /*
+    first iteration : acc:0 //initial value is the acc value 
+                      item:{firstName:"Sravani",score:3}
+    //whatever you return from here becomes the accumulated valueof the next iteration
+       return 0+3=3
+
+  */
+ return acc+item.score
+},0) //initial value
+console.log(x)

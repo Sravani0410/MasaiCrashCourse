@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      height: 100vh;
+      background-color: yellow;
+    }
+
+    .icon-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      width: 50%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden; 
+      /* background-color: blue; */
+    }
+
+    .icon {
+      color: #070606;
+      font-size: 24px;
+      margin: 20px;
+      border-radius: 50%;
+      /* position: absolute; */
+      transform: translate(-50%, -50%)
+    }
+    .icon-container>.fas{
+        animation: rotateContainer 5s ease-in-out infinite alternate;
+    }
+    .paybills {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      width: 50%;
+      height: 100%;
+      border-radius: 50%;
+      animation: moveLeftRight 5s ease-in-out infinite alternate; /* Add animation */
+    }
+    .icon:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateX(100px) rotate(0deg); }
+    .icon:nth-child(2) { transform: translate(-50%, -50%) rotate(90deg) translateX(100px) rotate(-90deg); }
+    .icon:nth-child(3) { transform: translate(-50%, -50%) rotate(180deg) translateX(100px) rotate(180deg); }
+    .icon:nth-child(4) { transform: translate(-50%, -50%) rotate(270deg) translateX(100px) rotate(-270deg); }
+    #pay-bills {
+      color: #1e1818;
+      border-radius: 50%;
+    }
+
+    @keyframes rotateContainer {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes moveLeftRight {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(50px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="paybills">
+    <i class="icon fas fa-dollar-sign" id="pay-bills">Pay bills instantly</i>
+  </div>
+  <div class="icon-container">
+    <i class="icon fas fa-home"></i>
+    <i class="icon fas fa-car"></i>
+    <i class="icon fas fa-heart"></i>
+    <i class="icon fas fa-coffee"></i>
+  </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+Test it from mongodb altas:
+===========================
+1.connect any of the cluster
+2.practice in mongosh shell
+   -create the database: use name of the database (e.g--> use advancedmongodbqueries)
+   -create a collection and insert the data:
+       db.heros.insertMany("here array of object the data)-->
+         e.g: db.heros.insertMany(
+                            [
+                        {
+                        "name":"IronMan",
+                        "powers":["robot","money"],
+                        "health":33,
+                        "villans":[
+                            {"name":"Mandarin","health":50},
+                            {"name":"Titanium Man","health":54}
+                        ],
+                        "metadata":{"favouriteColor":"red","age":13}
+                        },
+                        {
+                        "name":"BatMan",
+                        "powers":["Intelligence","money"],
+                        "health":40,
+                        "villans":[
+                            {"name":"TwoFace","health":20},
+                            {"name":"Redhood","health":65}
+                        ],
+                        "metadata":{"favouriteColor":"red","age":13}
+                        },
+                        {
+                        "name":"Spider-Man",
+                        "powers":["Intelligence"],
+                        "health":60,
+                        "villans":[
+                            {"name":"Venom","health":65},
+                            {"name":"Dr.Octavio","health":76}
+                        ],
+                        "metadata":{"favouriteColor":"red","age":44}
+                        },
+                        {
+                        "name":"Thor",
+                        "powers":["god","magic"],
+                        "health":57,
+                        "villans":[
+                            {"name":"Surtur","health":50},
+                            {"name":"Hela","health":87}
+                        ],
+                        "metadata":{"favouriteColor":"yellow","age":313}
+                        },
+                        {
+                        "name":"Dr.Strange",
+                        "powers":["magic"],
+                        "health":86,
+                        "villans":[
+                            {"name":"Hela","health":87},
+                            {"name":"Dormanu","health":100}
+                        ],
+                        "metadata":{"favouriteColor":"orange","age":44}
+                        },
+                    ]
+                        )
+       -check how many database are there:
+          show dbs
+       - check which database you are :
+           db
+       - how many collections are there:
+           show collections
+       - check the data in collection:
+            db.heros.find().pretty()
+            
+    

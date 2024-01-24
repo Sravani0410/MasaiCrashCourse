@@ -1,0 +1,228 @@
+Relationships:
+==============
+-with the help relationships we can link between collections
+   example:
+     Blogs collection
+     User collection
+
+     for particular user can access there specific blogs easily
+
+     User-{
+        name,
+        email
+     }
+
+     Blog-{
+        title,
+        content,
+        date,
+        author_name,
+        author_email
+     }
+
+     100 blogs: here no need to put author_email,author_name in every blog
+
+     for that we are using realtionships.
+    example2:
+        Author
+        Blogs
+
+        Author-{
+            name,
+            email, - unique
+            city
+        }
+        Blogs-{
+            blog_id - unique
+            title,
+            content,
+            image,
+            date
+        }
+
+       in these 2 ways to interlink:
+         1. email in blog collections 
+         2. blog_id in author collections
+        Note : 1st is more preferable in realtionship because email(author -->parent) is independent and blog(child) is dependent
+
+    Problem-1:
+       BlogModel
+       AuthModel
+     
+      api/blogs/delete/:blog_id  --> only author can delete the blog not every one
+
+    solution: 
+      BlogModel: 
+       const BlogModel=mongoose.schema({
+        "blog_id":number,
+        "title":String,
+        "content":String,
+        "image":String,
+        date:String
+       })
+
+       AuthModel:
+         const AuthModel=mongoose.schema({
+            "name":String,
+            "email":String,
+            "city":String
+         })
+     const blog_id=req.params
+     const email = //from token --> req.body
+     const author_email=BlogModel.findOne(blog_id).author_email
+     if(email===author_email){
+      BlogModel.findByIdAndDelete(blog_id)
+     }
+
+//optimized code:
+api/blogs/delete/:blog_id
+     const {blog_id}=req.params
+     const email = //user email is accessing from token --> req.body
+     BlogModel.findByIdAndDelete({blog_id:blog_id,author_email:email})
+
+             (or)
+api/blogs/delete/:blog_id
+     const {blog_id}=req.params
+     const email = //user email is accessing from token --> req.body
+     BlogModel.findByOneAndDelete({blog_id:blog_id,author_email:email})
+Problem2:
+========
+     AuthorA - blog1
+     AuthorB - blog2
+
+1.   api/blogs/delete/1
+     const {blog_id}=req.params  = 1
+     const email = //user email is accessing from token --> req.body ; - A@gmail.com
+     BlogModel.findByOneAndDelete({blog_id:1,author_email:A@gmail.com})
+
+o/p: AuthorA can delete the blog1
+
+2.   api/blogs/delete/1
+     const {blog_id}=req.params  = 1
+     const email = //user email is accessing from token --> req.body ; - A@gmail.com
+     BlogModel.findByOneAndDelete({blog_id:2,author_email:A@gmail.com})
+o/p: AuthorB can't delete the blog1
+
+$loopup operator:
+================
+    1.It means to search something. it helps us with creating a relationship and took query
+    2. mongoose Populate - ref;
+    3. basically, to establish a relationships between two collections and to get access the data across one collection
+
+    example:
+       blogs collection
+       author collection
+
+    by using mongodb queries we can't do db author.find()
+
+    combination of author with blogs using lookup:
+1)   find the all blogs of particular user
+     solution:
+    db.authors.aggregate([{$lookup:{from :"blogs",localField:"email",foreignField:"author_email",as:"myblog"}}])
+    
+    explanation: in lookup having  from -------->which collection we are taking from
+                                   localField ----> present collection field which is unique
+                                   foreignField ---> other collection with common field
+                                   as -------> write the key name of the object
+
+    o/p:{
+        _id: ObjectId("65aa599fb62578c7449dfe56"),
+        name: 'Aman',
+        email: 'aman@gmail.com',
+        role: 'SDE3',
+        myblogs: [
+            {
+            _id: ObjectId("65aa5a5db62578c7449dfe59"),
+            title: 'DSA 101',
+            content: 'Intro to Data structures',
+            author_email: 'aman@gmail.com'
+            }
+        ]
+        }
+2)  create two collections
+      posts - 5 posts
+      users - 2 users
+      established the relationship
+
+      users:
+        [
+            {
+                name:"sravani",
+                email:"sravani@gmail.com"
+                mobilenumber:9876543210
+            },
+            {
+                name:"sandhya",
+                email:"sandhya@gmail.com"
+                mobilenumber:9776633444
+            }
+        ]
+      posts:
+        [
+            {
+                title:"create a post1",
+                content:"make the post regarding the html,css,javascript",
+                author_email:"sravani@gmail.com"
+            },
+            {
+                title:"create a post2",
+                content:"make the post regarding the html,css,javascript",
+                author_email:"sandhya@gmail.com"
+            },
+            {
+                title:"create a post3",
+                content:"make the post regarding the react,redux",
+                author_email:"sravani@gmail.com"
+            },
+            {
+                title:"create a post4",
+                content:"make the post regarding the react,redux,redux-toolkit",
+                author_email:"sandhya@gmail.com"
+            },
+            {
+                title:"create a post5",
+                content:"make the post regarding the node,express,mongodb",
+                author_email:"sravani@gmail.com"
+            }
+        ]
+     solution:
+        db.users.aggregate([{$lookup:{from:"posts",localField:"email",foreignField:"author_email",as:"myposts"}}])
+ 
+$out operator:
+==============
+  1. we want to store that the data in separate collection with changing the existing collection
+        - [{},{},{},{$out}]
+            - here out is stored at the END
+            - write the documents/result into a new collection
+            - $out:{coll:"collection name"}
+
+        -example: previous example that output we want to store in separate collection:
+            db.users.aggregate([{$lookup:{from:"posts",localField:"email",foreignField:"author_email",as:"myposts"}},{$out:"userandtheirposts"}])
+        - this $out operator can used in any of the operator
+        for example:
+            db.zips.aggregate([{$group:{_id:"$state",largest_pop:{$sum:"$pop"}}},{$sort:{largest_pop:-1}},{$limit:10},{$out:"top10states"}])
+            previously without $out --> we are just READING
+            now with $out ----> we are Storing the output in another collection
+        - what happended if I give an existing collection name instead of the new collection?
+        Ans: it will overwrite the data
+            db.zips.aggregate([{$group:{_id:"$state",largest_pop:{$sum:"$pop"}}},{$sort:{largest_pop:1}},{$limit:5},{$out:"top10states"}])
+  2. we want to store the output in separate database
+     - $out:{db:"B", col:"userandtheirposts"}
+
+
+$project:
+=========
+   -those who fields are in visible
+      db.heros.aggregate([{$project:{name:1,health:1,_id:0}}])
+      db.heros.aggregate([{$match:{health:{$lt:58}}},{$project:{name:1,health:1,_id:0}}])
+$count:
+=======
+    -count the result or value or documents or data or fields
+      db.heros.aggregate([{$match:{health:{$lt:58}}},{$count:"youngheros"}])
+$set:
+=====
+   -if we have large amount of data then if want update or add any key value
+     db.heros.aggregate([{$match:{health:{$lt:40}}},{$set:{is_young:"true"}}]) 
+     db.orders.aggregate([{$match:{price:{$lt:15}}},{$set:{affordable:"true"}}])
+   - if any field already exists that i want to update:
+     db.orders.aggregate([{$match:{price:{$lt:15}}},{$set:{price:10}}])

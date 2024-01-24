@@ -1,0 +1,310 @@
+Aggregation:
+===========
+    Aggregate:
+        -to collect something together (one collection to another collection)
+        -to accumaulate
+        -very powerful 
+        -Aggregation operators
+    Seggrate:
+        - to separate 
+
+they are 2 ways to get the data to frontend:
+
+1.find something from the DB,then you can process(filtering,sorting,etc) in the server side/application side
+2.you writing the query in such a way that all the processing happens at the DB level itself
+
+Note: 2nd way is better because we don't want to load our server. we are writing optimel query to getting what we requried from Database.
+
+Pipeline: 
+     -flow the data from one end to another end
+     -each pipeline having stages
+     -input of each stage , depends the output of the previous stage.
+
+ senario:   
+                        filter more than 18            filter who are not vaccinated
+   eg 1: 100mb of people ------------------------> 20mb ---------------------------------> 10mb
+         |  (stage1)                             (stage 2)                          (stage 3)|
+          -----------------------------------------Pipeline----------------------------------
+   
+                            filter more than 18            filter who are not vaccinated
+   eg 2: 100mb of people ------------------------> null ---------------------------------> null 
+                                    (here itself stoped because data is null)
+
+ syntax:
+ ======
+      db.orders.find({price:500})
+      db.orders.aggregate([{},{},{},{}])
+
+      Note: nth stage works on the output of the n-1 th stage
+
+operators:
+==========
+   -starts with $ symbol
+   -learning curve - it is different from what we have learnt so far
+     
+     previously we limit after the find the query with dot(.limit) but in Aggregation here the 
+     e.g: ${limit:5}
+
+     data: 
+     [
+        {
+            "_id":0,
+           "name":"Pepperoni",
+           "size":"small",
+           "price":19,
+           "quantity":10,
+           "data":ISODate("2021-03-13T08:14:30Z")
+        },
+        {
+            "_id":1,
+           "name":"Pepperoni",
+           "size":"medium",
+           "price":20,
+           "quantity":20,
+           "data":ISODate("2021-03-13T09:13:24Z")
+        },
+        {
+            "_id":2,
+           "name":"Pepperoni",
+           "size":"large",
+           "price":21,
+           "quantity":30,
+           "data":ISODate("2021-03-13T09:22:12Z")
+        },
+        {
+            "_id":3,
+           "name":"Cheese",
+           "size":"small",
+           "price":12,
+           "quantity":15,
+           "data":ISODate("2021-03-13T11:21:39.736Z")
+        },
+        {
+            "_id":4,
+           "name":"Cheese",
+           "size":"medium",
+           "price":13,
+           "quantity":50,
+           "data":ISODate("2021-01-12T21:23:13.331Z")
+        },
+        {
+            "_id":5,
+           "name":"Cheese",
+           "size":"large",
+           "price":14,
+           "quantity":10,
+           "data":ISODate("2021-01-12T05:08:13Z")
+        },
+        {
+            "_id":6,
+           "name":"Vegan",
+           "size":"small",
+           "price":17,
+           "quantity":10,
+           "data":ISODate("2021-01-13T05:08:13Z")
+        },
+        {
+            "_id":7,
+           "name":"Vegan",
+           "size":"medium",
+           "price":18,
+           "quantity":10,
+           "data":ISODate("2021-01-13T05:10:13Z")
+        },
+     ]
+
+Practice:
+   db.orders.insertMany([
+        {
+            "_id":0,
+           "name":"Pepperoni",
+           "size":"small",
+           "price":19,
+           "quantity":10,
+           "data":ISODate("2021-03-13T08:14:30Z")
+        },
+        {
+            "_id":1,
+           "name":"Pepperoni",
+           "size":"medium",
+           "price":20,
+           "quantity":20,
+           "data":ISODate("2021-03-13T09:13:24Z")
+        },
+        {
+            "_id":2,
+           "name":"Pepperoni",
+           "size":"large",
+           "price":21,
+           "quantity":30,
+           "data":ISODate("2021-03-13T09:22:12Z")
+        },
+        {
+            "_id":3,
+           "name":"Cheese",
+           "size":"small",
+           "price":12,
+           "quantity":15,
+           "data":ISODate("2021-03-13T11:21:39.736Z")
+        },
+        {
+            "_id":4,
+           "name":"Cheese",
+           "size":"medium",
+           "price":13,
+           "quantity":50,
+           "data":ISODate("2021-01-12T21:23:13.331Z")
+        },
+        {
+            "_id":5,
+           "name":"Cheese",
+           "size":"large",
+           "price":14,
+           "quantity":10,
+           "data":ISODate("2021-01-12T05:08:13Z")
+        },
+        {
+            "_id":6,
+           "name":"Vegan",
+           "size":"small",
+           "price":17,
+           "quantity":10,
+           "data":ISODate("2021-01-13T05:08:13Z")
+        },
+        {
+            "_id":7,
+           "name":"Vegan",
+           "size":"medium",
+           "price":18,
+           "quantity":10,
+           "data":ISODate("2021-01-13T05:10:13Z")
+        },
+     ])
+
+   -find all the data in 2 methods:
+     1.db.orders.find().pretty()
+     2.db.orders.aggregate([])  // using aggregate
+  -practicing the commands:
+     db.orders.aggregate([{}]) //with empty stage
+       o/p: it is failed and through error
+            A pipeline stage specification object must contain exactly one field.
+$limit:
+=======
+1) db.orders.aggregate([{$limit:2}])
+    o/p: result will shown how normal limit will works
+2) db.orders.aggregate([{$limit:3},{$limit:1}])
+   o/p : result will shown 1st id will showing --> right because at 1st stage({$limit:3}) first 3 data through filter limit and next stage({$limit:1}) is depends upon previous stage({$limit:3}) so next stage({$limit:1}) 1st data
+$sort:
+=====
+3) sort by decresing and incresing order:
+   db.orders.aggregate([{$sort:{"price":-1}}]) // decending
+   db.orders.aggregate([{$sort:{"price":1}}])  //incresing
+4) combination of sort and limit
+    db.orders.aggregate([{$sort:{price:-1}},{$limit:3}])  // o/p : id:2,id:1
+    db.orders.aggregate([{$limit:2},{$sort:{price:-1}}])  // o/p: id:1,id:0
+$skip:
+=====
+5) combination of sort,limit and skip:
+    db.orders.aggregate([{$sort:{price:-1}},{$limit:3},{$skip:2}])  // o/p : it will skip first 2 datas means _id:0 data is displayed
+    db.orders.aggregate([{$sort:{price:-1}},{$limit:3},{$skip:3}])  // o/p: no data is there null because sort--> limit =3--> skip =3 ---> output is 0 data i.e., null
+$match:
+=======
+   matching the data
+   -ealier, db.orders.find({size:"small"}) // o/p: id are 0,3,6
+   - now, db.orders.aggregate([{$match:{size:"small"}}])  // o/p: id are 0,3,6
+6) Find all the medium sized pizzas in increasing order of their price
+   db.orders.aggregate([{$sort:{size:"medium"}},{price:1}]) // o/p: id's are 4,7,1
+7) find all the small size pizzaz with price >= 16
+    db.orders.aggregate([{$match:{size:"small"}},{$match:{price:{$gte:16}}}]) //o/p:id's are 0,6
+    //optimise:
+    ealier, db.orders.find({size:"small",price:{$gte:16}})
+    now, db.orders.aggregate([{$match:{size:small,price:{$gte:16}}}])
+8) find the smallest pizza with the highest price
+    db.orders.aggregate([{$match:{size:"small"}},{$sort:{price:-1}},{$limit:1}])  // o/p: id is 0
+    find the smallest pizza with the lowest price
+    db.orders.aggregate([{$match:{size:small}},{$sort:{price:1}},{$limit:1}])  //o/p: id:3
+
+$group:
+======
+   - collection of something
+      eg,1. 10,000 students: 
+            -time of course- FT,PT
+            -type of course - MERN,Node,Java
+            -state - Karnataka
+            -age -25
+         2. marbles group
+     if we want to group we need something we have to groupBy
+   - It's used to group by "somrthing", like "course","batch","course_time" etc;
+     so we need to give _id madatoroily
+9) we have to group by size
+    db.orders.aggregate([{$group:{_id:"$size"}}])
+
+    whatever we are group by we give the _id is madatoroily
+    here size is the remember to give $ symbol because we are not match, we grouping. we have to use size as parameter to group.
+10) find the total number of small size pizzas;
+    output:35
+    hint: total number means here count the quantity of small size pizzas
+
+    solving in on the server side:
+    =============================
+    api/total_small_pizzas
+        const total_small_pizza=0
+         const small_pizzas=OrdersModel.find({size:"small"})
+         small_pizzas.forEach((sp)=>{
+            total_small_pizzas=total_small_pizzas+sp.quantity
+         })
+         res.send(total_small_pizzas)
+   database side:
+   ==============
+   without using aggregate it is not possible in db side
+    db.orders.aggregate([{$group:{_id:"$small",avgqty:{$sum:"$quantity"}}}])
+
+    output looks like: {"_id":"small","avgqty":35}
+                       {"_id":"medium","avgqty":80}
+                       {"_id":"large","avgqty":40}
+11) find the total number of vegan pizzas
+    db.orders.aggregate([{$group:{_id:"$name",avgqty:{$sum:"$quantity"}}}])
+    output: {"_id":"Pepperoni","avgqty":60}
+            {"_id":"Cheese","avgqty":75}
+            {"_id":"Vegan","avgqty":20}
+    using match only we want the vegan data:
+
+    i)db.orders.aggregate([{$match:{name:"Vegan"}},{$group:{_id:"$name",total_qty:{$sum:"$quantity"}}}])
+      output:{"_id":"Vegan","avgqty":20}
+    
+    If we reverse this :
+    ii)db.orders.aggregate([{$group:{_id:"$name",total_qty:{$sum:"$quantity"}}},{$match:{name:"Vegan"}}])
+       output:{"_id":"Vegan","avgqty":20}
+    same output both i) and ii) but difference is limit after grouping and i) is most optimized
+
+12)Find the total cost of small size pizzas
+    solution: total cost =price * quantity
+    db.orders.aggregate([{$match:{size:"small"}}])
+
+questions practice:
+===================
+   download the this zip file add the data in local:
+    data is in zips.txt: and link is here https://media.mongodb.org/zips.json
+     
+     data having zips collection,we have city wise data;
+
+     state: Karnataka
+     city: bangalore
+     pop:10 lakhs
+     
+     state: Karnataka
+     city: Mysore
+     pop:10 lakhs
+
+     state: AP
+     city: kurnool
+     pop:10 lakhs
+
+13) find state with largest population in zips:
+    db.zips.aggregate([{$group:{_id:"$state",largest_pop:{$sum:"$pop"}}},{$sort:{largest_pop:-1}},{$limit:1}])
+     
+     output:  
+        {
+         _id:"CA",
+         largest_pop:29754890
+        }

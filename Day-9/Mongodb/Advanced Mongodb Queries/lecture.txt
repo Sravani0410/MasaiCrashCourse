@@ -1,0 +1,219 @@
+MongoDB Queries:
+===============
+CRUD: create,read,update,delete
+filtering 
+sorting
+
+
+"students" collection-->500 students
+
+GET api/students-->db.students.find()  -> send 500 data as response
+GET api/students?city=pune --> db.students.find({
+                                        city: req.query.city    
+                                })    // 40 students
+                                       (or)
+                             StudentModel.find({
+                                        city: req.query.city    
+                                })    // 40 students
+Filtering: there are 3 places we can filtering the data 
+             
+  1) 500 data as response-->filtering on the frontend
+  2) 40 data as response --> a) const students=StudentModel.find()
+                             b) const finalstudents=students.filter((stu)=>stu.sity===req.query.city)
+                             finalstudents as response;
+  3) 40 data as response --> StudentModel.find({city:req.query.city})
+
+Advance mongo queries:
+======================
+   data-types
+     
+
+     [
+        {
+           "name":"IronMan",
+           "powers":["robot","money"],
+           "health":33,
+           "villans":[
+            {"name":"Mandarin","health":50},
+            {"name":"Titanium Man","health":54}
+           ],
+           "metadata":{"favouriteColor":"red","age":13}
+        },
+        {
+           "name":"BatMan",
+           "powers":["Intelligence","money"],
+           "health":40,
+           "villans":[
+            {"name":"TwoFace","health":20},
+            {"name":"Redhood","health":65}
+           ],
+           "metadata":{"favouriteColor":"red","age":13}
+        },
+        {
+           "name":"Spider-Man",
+           "powers":["Intelligence"],
+           "health":60,
+           "villans":[
+            {"name":"Venom","health":65},
+            {"name":"Dr.Octavio","health":76}
+           ],
+           "metadata":{"favouriteColor":"red","age":44}
+        },
+        {
+           "name":"Thor",
+           "powers":["god","magic"],
+           "health":57,
+           "villans":[
+            {"name":"Surtur","health":50},
+            {"name":"Hela","health":87}
+           ],
+           "metadata":{"favouriteColor":"yellow","age":313}
+        },
+         {
+           "name":"Dr.Strange",
+           "powers":["magic"],
+           "health":86,
+           "villans":[
+            {"name":"Hela","health":87},
+            {"name":"Dormanu","health":100}
+           ],
+           "metadata":{"favouriteColor":"orange","age":44}
+        },
+     ]
+
+Questions:
+ 1) find a hero who's health is 40;
+     db.hero.find({"health":40})
+ 2) find a hero who's fav color=red and age=44
+     db.hero.find({"metadata":{favouriteColor:"red",age:44}}).pretty()
+     output will get because its there but if we change the order below 3rd example
+ 3) find a hero who'sage=44 and fav color=red
+    db.hero.find({"metadata":{age:44,favouriteColor:"red"}}).pretty()
+     output: data is not there because eventhough in object data same order is same but in mongodb it will change 
+     order matters
+ 4) find a hero who's fav color =red 
+     output: data is not there because we skip the age then data is nothing
+     here also order matters.Exact order is required
+ Exact order matters: whenever the data is in object like metadata . we ahve to use 3rd method
+ ====================
+  "metadata":{"favouriteColor":"orange","age":44}
+  "metadata.favouriteColor":"red"
+   4) find a hero who's fav color=red
+       db.hero.find({"metadata.favouriteColor":"red"}).pretty()
+       output : display the data
+   5) find all the hero's who's age is less than 50
+       db.hero.find({"metadata.age":{"$lte":50}}).pretty()
+add one more data:
+==================
+  db.hero.insertOne( {
+           "name":"Dr.Strange",
+           "powers":["magic"],
+           "health":86,
+           "villans":[
+            {"name":"Hela","health":87},
+            {"name":"Dormanu","health":100}
+           ],
+           "metadata":{
+            "favouriteColor":{
+            "summer":{
+                "day_time":"yellow",
+                "night_time":"blue"
+            },
+            "rainy":"red
+           },
+           "age":44}
+        }
+        )
+
+    6) all heros who's favouriteColor in summer s yellow
+    7) find the all heros who's favouriteColor during day_time in summer is yellow
+            db.hero.find({
+            "metadata.favouriteColor.summer.day_time": "yellow"
+            })
+    8) find all hero's who's powers are intelligence and money
+        db.heros.find({"powers":["Intelligence","money"]})
+    9)  find all hero's who's powers are  money and intelligence (interchange)
+        db.heros.find({"powers":["money","Intelligence"]})
+        output:  date is not there 
+        same priniciple will be applicable here
+order matters--> 
+ 10)  find all hero's who's powers are intelligence 
+       db.heros.find({"powers":["Intelligence"]}).pretty()
+       output: it will work and show the data but in object it won't because
+          powers:["Intelligence"] ----> same as powers:"Intelligence"
+        db.heros.find({"powers":"Intelligence"}).pretty()
+        output: it will give output
+ 
+ 11) find all hero's who's  powers of magic
+    db.heros.find({"powers":["magic"]}).pretty()
+     output: it will give all the object which contants when through combination with god or  Intelligence
+    but if 
+    db.heros.find({"powers":"magic"}).pretty()
+    output: it will only magic content object
+
+    Note : in object this senario is not happended only array it will happneded
+$all:
+=====
+12) find all the hero's who's powers is intelligence and money , irrespective of the order;
+    db.heros.find("powers":{"$all":["money","Intelligence"]})
+    output: it will give because of $all query---> all the values present
+13) db.heros.find("powers":{"$all":["money","Intelligence","xyz"]})
+    output: it will not give because data is not there in such cases we use $in--> any of the element is present
+$in:
+=====
+14)find all the hero's who's powers is intelligence or robot
+    db.powers.find("powers":["Intelligence","robot"])
+     output: no data
+     db.heros.find("powers":{"$in":["Intelligence","robot"]})
+     output: all the data which is present any value in the array
+$in and $or difference:
+========================
+$all and $and 
+$in and $or
+
+${exists}:
+==========
+15) find the all exists value in villains
+    db.heros.find({"villains}:{$exists:true})
+
+Projection:
+===========
+ Projector---> it projects something remaining it is not visible
+
+16) find all the hero's who's health is less than 50 and we want only names and health of them;
+
+  db.heros.find({"health":{"$lte":50}},{"name":1,"health":1})
+
+  here :
+    1 means --> true --> ON
+    _id is projected by default
+    0 means -->false --> OFF
+
+17) find all the hero's who having only villains data
+     db.heros.find({"villans":{"$exists":true}},{"villans":1,"_id":0})
+
+18) db.heros.find({"name":"Thor"},{"villans":1,_id:0})
+     it will give villans of Thor name
+    
+
+
+
+Review:
+======
+1)every thing in mongodb: 
+   collection
+2)in collection we have data called as documents:
+   documents
+3)Each documents is kind of object
+    {
+        key:values
+        key:string/number/boolean
+        key:object // we can use directly through dot notion
+        key:array // $all,$in
+        key:"embedded object--> object inside the object
+        key:array of objects
+    }
+   Q) find the all the hero's who having a villain of name Hela
+     db.heros.find({"villans":{"name":"Hela","health":87}})
+
+
