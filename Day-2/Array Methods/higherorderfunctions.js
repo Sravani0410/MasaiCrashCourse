@@ -1,4 +1,4 @@
-/*higer order function:
+/*higher order function:
 function a(){
 
 }
@@ -11,6 +11,17 @@ above example:
   here another function is invoke to one function i.e., send as a argument that function is called callback function
   
 */
+// example:
+   function sum(n1,n2,next){
+     let sum=n1+n2
+     console.log(next(sum))
+   }
+   function square(n){
+      return n**2
+   }
+   let x=1;
+   let y=2;
+   sum(x,y,square)
 
 // ***************************************map*************************************
 /*
@@ -141,13 +152,13 @@ above example:
 // console.log(x)
 
 // *******************Reduce*************************
-let arr1=[
-  {firstName:"Sravani",score:3},
-  {firstName:"Sandhya",score:7},
-  {firstName:"Devi",score:3},
-]
+// let arr1=[
+//   {firstName:"Sravani",score:3},
+//   {firstName:"Sandhya",score:7},
+//   {firstName:"Devi",score:3},
+// ]
 
-let x=arr1.reduce((acc,item)=>{
+// let x=arr1.reduce((acc,item)=>{
   /*
     first iteration : acc:0 //initial value is the acc value 
                       item:{firstName:"Sravani",score:3}
@@ -155,6 +166,6 @@ let x=arr1.reduce((acc,item)=>{
        return 0+3=3
 
   */
- return acc+item.score
-},0) //initial value
-console.log(x)
+//  return acc+item.score
+// },0) //initial value
+// console.log(x)

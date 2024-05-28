@@ -1,9 +1,9 @@
 // let arr=[1,2,3,4,5]
-// arr.push('six') //add the value to end
-// arr.pop() // last value is removed from the end
+// arr.push('six') //add the value to end [1,2,3,4,5,'six']
+// arr.pop() // last value is removed from the end [1,2,3,4]
 
-// arr.shift() // first value is removed from the start
-// arr.unshift("Zero") // add the value to start
+// arr.shift() // first value is removed from the start //[2,3,4,5]
+// arr.unshift("Zero") // add the value to start  // ["Zero",1,2,3,4,5]
 // console.log(arr)
 
 //*******************************concat*************************
@@ -20,7 +20,7 @@
 
 //****************************** slice **************************************
 
-// it will take start index and end index(it is exclusive means not included)
+// it will take start index and end index(it is exclusive i.e., not included)
 
 // let arr1= [0,1,2,3,4,5,6,7,8,9]
 // let arr2=arr1.slice(0,6)
@@ -69,20 +69,21 @@
 //            It's like modifying a specific portion of an array.
 
 
-let arr1=[0,1,2,3,4,5,6,7,8]
+// let arr1=[0,1,2,3,4,5,6,7,8]
+// remove and adding the elements
 // let arr2=arr1.splice(2,3,"two","three","four")
 // remove the numbers from array using splice
 // let arr3=arr1.splice(2,3)
 // remove all the elements 
 // let arr4=arr1.splice(2)
 // remove from last
-let arr5=arr1.splice(-5,3)
+// let arr5=arr1.splice(-5,3)
 // console.log(arr2)
 // console.log(arr1)
 // console.log(arr3)
 // console.log(arr1)
 // console.log(arr4)
 // console.log(arr1)
-console.log(arr5)
-console.log(arr1)
+// console.log(arr5)
+// console.log(arr1)
 
